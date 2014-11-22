@@ -140,7 +140,7 @@ class TccZoom {
 		<table class="form-table" style="margin-top:0px;">
 			<tr valign="top">
 				<td style="padding:0px;">
-					<input type="checkbox" id="zoom_over_thumbnails" name="zoom_image_options[zoom_thumbnails]" value="1" <?php if ( $options['zoom_thumbnails'] == 1 ) { ?> checked="checked" <?php } ?> />
+					<input type="checkbox" id="zoom_over_thumbnails" name="zoom_image_options[zoom_thumbnails]" value="1" <?php checked( 1, $options['zoom_thumbnails'], true ); ?> />
 				</td>
 				<td style="border:1px solid #999; padding:5px 0 5px 5px; color:#999;">
 					Thick the checkbox to add zoom effect over thumbnails.    
@@ -162,8 +162,8 @@ class TccZoom {
 			<tr valign="top">
 				<td style="padding:0px;">
 					<select name="zoom_image_options[zoom_type]">
-						<option value="window" <?php if ( $options['zoom_type'] == 'window' ) { ?> selected="selected" <?php } ?>>Window</option>
-						<option value="inner" <?php if ( $options['zoom_type'] == 'inner' ) { ?> selected="selected" <?php } ?>>Inner</option>
+						<option value="window" <?php selected( 'window', $options['zoom_type'], true); ?>>Window</option>
+						<option value="inner" <?php selected( 'inner', $options['zoom_type'], true); ?>>Inner</option>
 					</select>
 				</td>
 				<td style="border:1px solid #999; padding:0 0 0 5px; color:#999;">
@@ -179,8 +179,8 @@ class TccZoom {
 		$options = get_option( 'zoom_image_options' );
 		?>
 		<select name="zoom_image_options[zoom_level]">
-			<option value="1" <?php if ( $options['zoom_level'] == 1 ) { ?> selected="selected" <?php } ?>>Normal zoom</option>
-			<option value="2" <?php if ( $options['zoom_level'] == 2 ) { ?> selected="selected" <?php } ?>>Twice as small</option>
+			<option value="1" <?php selected( 1, $options['zoom_level'], true); ?>>Normal zoom</option>
+			<option value="2" <?php selected( 2, $options['zoom_level'], true); ?>>Twice as small</option>
 		</select>
 		<?php
 	}
@@ -221,7 +221,7 @@ class TccZoom {
 
 		ob_start();
 
-		if ( $options['zoom_thumbnails'] == 1 ) {
+		if ( ! empty( $options ) && $options['zoom_thumbnails'] == 1 ) {
 			?>
 			<script type="text/javascript">
 				jQuery(document).ready(function($){
@@ -258,7 +258,7 @@ class TccZoom {
 		
 		$html = ob_get_clean();
 		
-		return apply_filters( 'zoom_thumbnails_scripts_output', $html );
+		echo apply_filters( 'zoom_thumbnails_scripts_output', $html );
 	}
 
 	function apply_zoom_main_image( $link_image ) {
@@ -285,17 +285,30 @@ class TccZoom {
 		echo preg_replace( '~<(?:!DOCTYPE|/?(?:html|body))[^>]*>\s*~i', '', $new_link );
 		?>
 		<script type="text/javascript">
-
+			
+			var $i = 0;
+			var newSmallPicture = jQuery('.main-image-add-zoom-image-feature img').attr('src');
+			
 			/* variations scripting */
 			jQuery(window).load(function($){
 				function changePicture()
 				{
-					var newLargePicture = jQuery('.main-image-add-zoom-image-feature').attr('href');
-					var newSmallPicture = jQuery('.main-image-add-zoom-image-feature img').attr('src');
-					jQuery('.main-image-add-zoom-image-feature img').attr('data-zoom-image', newLargePicture);
-					var ez = jQuery('.main-image-add-zoom-image-feature img').data('elevateZoom');
-					ez.swaptheimage(newSmallPicture, newLargePicture);
+					if( ( jQuery('.main-image-add-zoom-image-feature img').attr('src') != newSmallPicture ) || ( 0 == $i ) ) {
+						
+						var newLargePicture = jQuery('.main-image-add-zoom-image-feature').attr('href');
+						newSmallPicture = jQuery('.main-image-add-zoom-image-feature img').attr('src');
+						jQuery('.main-image-add-zoom-image-feature img').attr('data-zoom-image', newLargePicture);
+						var ez = jQuery('.main-image-add-zoom-image-feature img').data('elevateZoom');
+						ez.swaptheimage(newSmallPicture, newLargePicture);
+						
+						$i++;
+					}
 				}
+				
+				if( 0 == $i ) {
+					changePicture();
+				}
+				
 				jQuery(".main-image-add-zoom-image-feature img").load(function(){ changePicture(); });
 			});
 			
