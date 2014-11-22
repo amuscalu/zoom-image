@@ -358,7 +358,7 @@ class TccZoom {
 	}
 
 	function add_scripts() {
-		wp_enqueue_script( 'tcc-magnifier-js', $this->pluginUrl . '/js/jquery.elevateZoom-2.5.5.min.js', array( 'jquery' ) );
+		wp_enqueue_script( 'tcc-magnifier-js', $this->pluginUrl . '/js/jquery.elevateZoom-3.0.8.min.js', array( 'jquery' ) );
 	}
 
 }
