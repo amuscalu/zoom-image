@@ -4,7 +4,7 @@
   Plugin URI: http://www.outsourcing-webdesign.com/wordpress-plugins/
   Description: Add zoom efect over featured image, thumbnails and variations on WooCommerce shops in a simple and elegant mode.
   Author: Alexandru Muscalu
-  Version: 1.6.1
+  Version: 1.7.0
   Author URI: http://www.outsourcing-webdesign.com
   License: GPLv2 or later
  */
